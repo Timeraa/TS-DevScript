@@ -1,0 +1,11 @@
+{
+  "name": "devscript",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:Timeraa/DevScript.git",
+  "author": "Florian Metz",
+  "license": "MPL-2.0",
+  "bin": {
+    "devScript": "bin/devScript.js"
+  }
+}
