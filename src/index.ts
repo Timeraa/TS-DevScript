@@ -72,7 +72,10 @@ async function fileChange(diagnostic: ts.Diagnostic) {
     if (child && !child.killed) child.kill("SIGINT");
 
     await copyTask;
-    if (config.file) child = fork(process.cwd() + "/" + config.file);
+    if (config.file)
+      child = fork(process.cwd() + "/" + config.file, [], {
+        cwd: config.outDir
+      });
   } else console.log(chalk.yellow(diagnostic.messageText.toString()));
 }
 
