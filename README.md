@@ -1,6 +1,6 @@
 # DevScript
 
-Simple **TypeScript** script i use in all of my project.
+Simple **TypeScript** script I use in all of my project.
 
 ## Why
 
