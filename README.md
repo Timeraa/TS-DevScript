@@ -6,6 +6,16 @@ Simple **TypeScript** script i use in all of my project.
 
 I wrote this script to simplify my TypeScript workflow as I like to have all my files organised and hate having multiple terminals open at the same time. This script copies and compiles everything in `srcDir` to `outDir` and then runs and automatically restarts the set `file`.
 
+## Installation
+
+```bash
+# Yarn
+$ npm i Timeraa/DevScript
+
+# NPM
+$ yarn add Timeraa/DevScript
+```
+
 ## Usage
 
 ```bash
