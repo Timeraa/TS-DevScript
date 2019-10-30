@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2018",
+    "inlineSourceMap": true,
+    "esModuleInterop": true,
+    "removeComments": true,
+    "outDir": "bin",
+    "baseUrl": "."
+  }
+}
