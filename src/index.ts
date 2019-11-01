@@ -44,21 +44,24 @@ const formatHost: ts.FormatDiagnosticsHost = {
 //* Create ts program
 const createProgram = ts.createSemanticDiagnosticsBuilderProgram;
 
-//* Create Watch compoile host
-const host = ts.createWatchCompilerHost(
-  `${process.cwd()}/${config.tsconfig}`,
-  {},
-  ts.sys,
-  createProgram,
-  reportDiagnostic,
-  fileChange
-);
+if (process.argv.includes("--compile")) {
+  copyFiles();
+} else {
+  //* Create Watch compoile host
+  const host = ts.createWatchCompilerHost(
+    `${process.cwd()}/${config.tsconfig}`,
+    {},
+    ts.sys,
+    createProgram,
+    reportDiagnostic,
+    fileChange
+  );
+  ts.createWatchProgram(host);
+}
 
 function reportDiagnostic(diagnostic: ts.Diagnostic) {
   console.log(chalk.redBright(ts.formatDiagnostic(diagnostic, formatHost)));
 }
-
-ts.createWatchProgram(host);
 
 async function fileChange(diagnostic: ts.Diagnostic) {
   if ([6031, 6032].includes(diagnostic.code)) {
@@ -81,6 +84,11 @@ async function fileChange(diagnostic: ts.Diagnostic) {
 
 async function copyFiles() {
   if (config.deleteObsolete) await deleteObsolete();
+
+  if (existsSync("package.json")) copySync("package.json", "dist/package.json");
+  if (existsSync("package-lock.json"))
+    copySync("package-lock.json", "dist/package-lock.json");
+  if (existsSync("yarn.lock")) copySync("yarn.lock", "dist/yarn.lock");
 
   //* Copy files from src to dist
   copySync("src", "dist", {
