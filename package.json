@@ -1,6 +1,6 @@
 {
   "name": "devscript",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
   "repository": "git@github.com:Timeraa/DevScript.git",
   "author": "Florian Metz",
