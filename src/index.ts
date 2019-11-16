@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-import { existsSync, readFile, readFileSync } from "fs";
+import { existsSync, readFileSync } from "fs";
 import * as ts from "typescript";
 import chalk from "chalk";
-import { ChildProcess, fork } from "child_process";
+import { ChildProcess, fork, spawn } from "child_process";
 import glob from "fast-glob";
 import { removeSync, copySync } from "fs-extra";
 import { extname } from "path";
@@ -42,7 +42,6 @@ if (!config.srcDir) config.srcDir = "src";
 if (!config.outDir) config.outDir = "dist";
 if (!config.deleteObsolete) config.deleteObsolete = true;
 if (!config.tsconfig) config.tsconfig = "tsconfig.json";
-if (!config.file) config.file = "index.js";
 
 const formatHost: ts.FormatDiagnosticsHost = {
   getCanonicalFileName: path => path,
@@ -85,10 +84,29 @@ async function fileChange(diagnostic: ts.Diagnostic) {
     if (child && !child.killed) child.kill("SIGINT");
 
     await copyTask;
-    if (config.file)
-      child = fork(process.cwd() + "/" + config.file, [], {
-        cwd: config.outDir
-      });
+    if (existsSync(process.cwd() + "/" + config.outDir + "/" + "index.js")) {
+      if (config.file)
+        child = fork(process.cwd() + "/" + config.file, [], {
+          cwd: config.outDir
+        });
+      else if (existsSync(process.cwd() + "/package.json")) {
+        const pjson = require(process.cwd() + "/package.json");
+
+        if (pjson.scripts && pjson.scripts.start)
+          child = spawn(
+            existsSync(process.cwd() + "/yarn.lock")
+              ? "yarn run --silent start"
+              : "npm run --silent start",
+            {
+              shell: true,
+              stdio: "inherit"
+            }
+          );
+      } else
+        fork(process.cwd() + "/index.js", [], {
+          cwd: config.outDir
+        });
+    }
   } else if (silentRun)
     console.log(chalk.yellow(diagnostic.messageText.toString()));
 }
