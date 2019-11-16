@@ -1,5 +1,5 @@
 {
-  "name": "devscript",
+  "name": "@timeraa/devscript",
   "description": "Simple development script to make working with TypeScript projects easy.",
   "version": "1.0.1",
   "main": "index.js",
