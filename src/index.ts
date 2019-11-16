@@ -17,6 +17,15 @@ let config = {
   },
   child: ChildProcess = null,
   copyTask: Promise<any>;
+const silentRun =
+  !process.argv.includes("-s") && !process.argv.includes("--silent");
+
+if (silentRun)
+  console.log(
+    chalk.yellow(
+      `DevScript v${require(__dirname + "/../package.json").version}`
+    )
+  );
 
 if (existsSync(`${process.cwd()}/.devScript.json`)) {
   try {
@@ -44,7 +53,7 @@ const formatHost: ts.FormatDiagnosticsHost = {
 //* Create ts program
 const createProgram = ts.createSemanticDiagnosticsBuilderProgram;
 
-if (process.argv.includes("--compile")) {
+if (process.argv.includes("--copyOnly")) {
   copyFiles();
 } else {
   //* Create Watch compoile host
@@ -60,15 +69,16 @@ if (process.argv.includes("--compile")) {
 }
 
 function reportDiagnostic(diagnostic: ts.Diagnostic) {
-  console.log(chalk.redBright(ts.formatDiagnostic(diagnostic, formatHost)));
+  if (silentRun)
+    console.log(chalk.redBright(ts.formatDiagnostic(diagnostic, formatHost)));
 }
 
 async function fileChange(diagnostic: ts.Diagnostic) {
   if ([6031, 6032].includes(diagnostic.code)) {
-    console.log(chalk.blue(diagnostic.messageText.toString()));
+    if (silentRun) console.log(chalk.blue(diagnostic.messageText.toString()));
     copyTask = copyFiles();
   } else if ([6194].includes(diagnostic.code)) {
-    console.log(chalk.green(diagnostic.messageText.toString()));
+    if (silentRun) console.log(chalk.green(diagnostic.messageText.toString()));
 
     //* Kill old child
     //* Spawn new child
@@ -79,19 +89,22 @@ async function fileChange(diagnostic: ts.Diagnostic) {
       child = fork(process.cwd() + "/" + config.file, [], {
         cwd: config.outDir
       });
-  } else console.log(chalk.yellow(diagnostic.messageText.toString()));
+  } else if (silentRun)
+    console.log(chalk.yellow(diagnostic.messageText.toString()));
 }
 
 async function copyFiles() {
   if (config.deleteObsolete) await deleteObsolete();
 
-  if (existsSync("package.json")) copySync("package.json", "dist/package.json");
+  if (existsSync("package.json"))
+    copySync("package.json", `${config.outDir}/package.json`);
   if (existsSync("package-lock.json"))
-    copySync("package-lock.json", "dist/package-lock.json");
-  if (existsSync("yarn.lock")) copySync("yarn.lock", "dist/yarn.lock");
+    copySync("package-lock.json", `${config.outDir}/package-lock.json`);
+  if (existsSync("yarn.lock"))
+    copySync("yarn.lock", `${config.outDir}/yarn.lock`);
 
   //* Copy files from src to dist
-  copySync("src", "dist", {
+  copySync("src", config.outDir, {
     filter: function(path) {
       if (path.includes("/node_modules")) return false;
       return extname(path) !== ".ts";

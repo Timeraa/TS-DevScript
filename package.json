@@ -1,8 +1,12 @@
 {
   "name": "devscript",
+  "description": "Simple development script to make working with TypeScript projects easy.",
   "version": "1.0.1",
   "main": "index.js",
   "repository": "git@github.com:Timeraa/DevScript.git",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "author": "Florian Metz",
   "license": "MPL-2.0",
   "files": [
