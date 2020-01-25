@@ -20,19 +20,6 @@ let config = {
 	child: ChildProcess = null,
 	copyTask: Promise<any>;
 
-const watcher = chokidar.watch(config.srcDir, {
-	ignored: /(\.ts)/g,
-	persistent: true,
-	ignoreInitial: true
-});
-
-watcher.on("all", (eventName, path, stats) => {
-	console.log(chalk.blue(`${basename(path)} changed. Restarting...`));
-	copyTask = copyFiles();
-
-	restartChild();
-});
-
 const silentRun =
 	!process.argv.includes("-s") && !process.argv.includes("--silent");
 
@@ -71,6 +58,18 @@ const createProgram = ts.createSemanticDiagnosticsBuilderProgram;
 if (process.argv.includes("--copyOnly")) {
 	copyFiles();
 } else {
+	const watcher = chokidar.watch(config.srcDir, {
+		ignored: /(\.ts)/g,
+		persistent: true,
+		ignoreInitial: true
+	});
+
+	watcher.on("all", (eventName, path, stats) => {
+		console.log(chalk.blue(`${basename(path)} changed. Restarting...`));
+		copyTask = copyFiles();
+
+		restartChild();
+	});
 	//* Create Watch compoile host
 	const host = ts.createWatchCompilerHost(
 		`${process.cwd()}/${config.tsconfig}`,
