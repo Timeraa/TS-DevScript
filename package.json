@@ -1,28 +1,29 @@
 {
-  "name": "@timeraa/devscript",
-  "description": "Simple development script to make working with TypeScript projects easy.",
-  "version": "1.0.2",
-  "main": "index.js",
-  "repository": "git@github.com:Timeraa/DevScript.git",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  },
-  "author": "Florian Metz",
-  "license": "MPL-2.0",
-  "files": [
-    "bin/index.js"
-  ],
-  "bin": {
-    "devScript": "bin/index.js"
-  },
-  "dependencies": {
-    "chalk": "^2.4.2",
-    "fast-glob": "^3.1.0",
-    "fs-extra": "^8.1.0",
-    "typescript": "^3.6.4"
-  },
-  "devDependencies": {
-    "@types/fs-extra": "^8.0.1",
-    "@types/node": "^12.12.0"
-  }
+	"name": "@timeraa/devscript",
+	"description": "Simple development script to make working with TypeScript projects easy.",
+	"version": "1.0.3",
+	"main": "index.js",
+	"repository": "git@github.com:Timeraa/DevScript.git",
+	"publishConfig": {
+		"registry": "https://npm.pkg.github.com/"
+	},
+	"author": "Florian Metz",
+	"license": "MPL-2.0",
+	"files": [
+		"bin/index.js"
+	],
+	"bin": {
+		"devScript": "bin/index.js"
+	},
+	"dependencies": {
+		"chalk": "^3.0.0",
+		"chokidar": "^3.3.1",
+		"fast-glob": "^3.1.0",
+		"fs-extra": "^8.1.0",
+		"typescript": "^3.6.4"
+	},
+	"devDependencies": {
+		"@types/fs-extra": "^8.0.1",
+		"@types/node": "^13.5.0"
+	}
 }

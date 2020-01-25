@@ -9,10 +9,10 @@ I wrote this script to simplify my TypeScript workflow as I like to have all my 
 ## Installation
 
 ```bash
-# Yarn
+# npm
 $ npm i Timeraa/DevScript
 
-# NPM
+# yarn
 $ yarn add Timeraa/DevScript
 ```
 
