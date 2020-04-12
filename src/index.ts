@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 
 import { existsSync, readFileSync } from "fs";
-import * as ts from "typescript";
-import chalk from "chalk";
+import ts = require("typescript");
+import chalk = require("chalk");
+// eslint-disable-next-line no-unused-vars
 import { ChildProcess, fork, spawn } from "child_process";
-import glob from "fast-glob";
+import glob = require("fast-glob");
 import { removeSync, copySync } from "fs-extra";
 import { extname, basename } from "path";
-
-import chokidar from "chokidar";
+import * as chokidar from "chokidar";
 
 let config = {
 		srcDir: "src",
@@ -47,7 +47,7 @@ if (!config.deleteObsolete) config.deleteObsolete = true;
 if (!config.tsconfig) config.tsconfig = "tsconfig.json";
 
 const formatHost: ts.FormatDiagnosticsHost = {
-	getCanonicalFileName: path => path,
+	getCanonicalFileName: (path) => path,
 	getCurrentDirectory: ts.sys.getCurrentDirectory,
 	getNewLine: () => ts.sys.newLine
 };
@@ -64,7 +64,7 @@ if (process.argv.includes("--copyOnly")) {
 		ignoreInitial: true
 	});
 
-	watcher.on("all", (eventName, path, stats) => {
+	watcher.on("all", (path) => {
 		console.log(chalk.blue(`${basename(path)} changed. Restarting...`));
 		copyTask = copyFiles();
 
@@ -111,13 +111,13 @@ async function copyFiles() {
 
 	//* Copy files from src to dist
 	copySync("src", config.outDir, {
-		filter: function(path) {
+		filter: function (path) {
 			if (path.includes("/node_modules")) return false;
 			return extname(path) !== ".ts";
 		}
 	});
 }
-//TODO Find out why port in use / quits after start
+
 async function deleteObsolete() {
 	//* Select files
 	let dist = await glob(config.outDir + "/**/*", {
@@ -128,17 +128,15 @@ async function deleteObsolete() {
 		});
 
 	//* Filter file differences
-	let nDist = dist.map(f => [f.replace(config.outDir, ""), f]);
+	let nDist = dist.map((f) => [f.replace(config.outDir, ""), f]);
 	src = src
-		.map(f => f.replace(config.srcDir, "").split(".")[0])
-		.filter(sf => nDist.find(d => d[0].split(".")[0] == sf));
+		.map((f) => f.replace(config.srcDir, "").split(".")[0])
+		.filter((sf) => nDist.find((d) => d[0].split(".")[0] == sf));
 
 	//* Old files, delete
-	Promise.all(
-		dist
-			.filter(f => !src.includes(f.replace(config.outDir, "").split(".")[0]))
-			.map(f => removeSync(f))
-	);
+	dist
+		.filter((f) => !src.includes(f.replace(config.outDir, "").split(".")[0]))
+		.map((f) => removeSync(f));
 }
 
 async function restartChild() {
@@ -146,7 +144,7 @@ async function restartChild() {
 	//* Spawn new child
 	if (child && !child.killed) {
 		child.unref();
-		child.kill();
+		child.kill("SIGKILL");
 	}
 
 	await copyTask;
