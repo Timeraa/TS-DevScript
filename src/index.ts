@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 
 import { existsSync, readFileSync } from "fs";
-import ts = require("typescript");
-import chalk = require("chalk");
+import ts from "typescript";
+import chalk from "chalk";
 // eslint-disable-next-line no-unused-vars
 import { ChildProcess, fork, spawn } from "child_process";
 import glob = require("fast-glob");
 import { removeSync, copySync } from "fs-extra";
 import { extname, basename } from "path";
-import * as chokidar from "chokidar";
+import chokidar from "chokidar";
 
 let config = {
 		srcDir: "src",
