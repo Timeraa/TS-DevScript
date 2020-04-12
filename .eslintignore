@@ -1,0 +1,8 @@
+node_modules
+dist
+bin
+
+.vscode
+
+tsconfig.json
+package.json

@@ -9,17 +9,24 @@ I wrote this script to simplify my TypeScript workflow as I like to have all my 
 ## Installation
 
 ```bash
+# global
+$ npm i -g Timeraa/DevScript
+
 # npm
-$ npm i Timeraa/DevScript
+$ npm i -D Timeraa/DevScript
 
 # yarn
-$ yarn add Timeraa/DevScript
+$ yarn add -D Timeraa/DevScript
 ```
 
 ## Usage
 
 ```bash
+# if global
 $ devScript
+
+# if local
+$ npx devScript
 ```
 
 ## Configuration

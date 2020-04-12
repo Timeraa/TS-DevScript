@@ -1,7 +1,7 @@
 {
 	"name": "@timeraa/devscript",
 	"description": "Simple development script to make working with TypeScript projects easy.",
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"main": "index.js",
 	"repository": "git@github.com:Timeraa/DevScript.git",
 	"publishConfig": {
@@ -16,14 +16,17 @@
 		"devScript": "bin/index.js"
 	},
 	"dependencies": {
-		"chalk": "^3.0.0",
+		"chalk": "^4.0.0",
 		"chokidar": "^3.3.1",
-		"fast-glob": "^3.1.0",
-		"fs-extra": "^8.1.0",
-		"typescript": "^3.6.4"
+		"fast-glob": "^3.2.2",
+		"fs-extra": "^9.0.0",
+		"typescript": "^3.8.3"
 	},
 	"devDependencies": {
-		"@types/fs-extra": "^8.0.1",
-		"@types/node": "^13.5.0"
+		"@types/fs-extra": "^8.1.0",
+		"@types/node": "^13.11.1",
+		"@typescript-eslint/eslint-plugin": "^2.27.0",
+		"@typescript-eslint/parser": "^2.27.0",
+		"eslint": "^6.8.0"
 	}
 }
