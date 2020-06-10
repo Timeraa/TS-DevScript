@@ -10,13 +10,13 @@ I wrote this script to simplify my TypeScript workflow as I like to have all my 
 
 ```bash
 # global
-$ npm i -g Timeraa/DevScript
+$ npm i -g ts-devscript
 
 # npm
-$ npm i -D Timeraa/DevScript
+$ npm i -D ts-devscript
 
 # yarn
-$ yarn add -D Timeraa/DevScript
+$ yarn add -D ts-devscript
 ```
 
 ## Usage
