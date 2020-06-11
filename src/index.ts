@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import chalk from "chalk";
 import chokidar from "chokidar";
 import ts from "typescript";
@@ -5,6 +6,7 @@ import { basename, extname } from "path";
 import { ChildProcess, fork, spawn } from "child_process";
 import { copySync, removeSync } from "fs-extra";
 import { existsSync, readFileSync } from "fs";
+
 // eslint-disable-next-line no-unused-vars
 import glob = require("fast-glob");
 
