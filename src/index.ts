@@ -1,14 +1,12 @@
-#!/usr/bin/env node
-
-import { existsSync, readFileSync } from "fs";
-import ts from "typescript";
 import chalk from "chalk";
-// eslint-disable-next-line no-unused-vars
-import { ChildProcess, fork, spawn } from "child_process";
-import glob = require("fast-glob");
-import { removeSync, copySync } from "fs-extra";
-import { extname, basename } from "path";
 import chokidar from "chokidar";
+import ts from "typescript";
+import { basename, extname } from "path";
+import { ChildProcess, fork, spawn } from "child_process";
+import { copySync, removeSync } from "fs-extra";
+import { existsSync, readFileSync } from "fs";
+// eslint-disable-next-line no-unused-vars
+import glob = require("fast-glob");
 
 let config = {
 		srcDir: "src",
