@@ -1,32 +1,36 @@
 #!/usr/bin/env node
 import chalk from "chalk";
-import chokidar from "chokidar";
-import ts from "typescript";
-import { basename, extname } from "path";
 import { ChildProcess, fork, spawn } from "child_process";
-import { copySync, removeSync } from "fs-extra";
+import chokidar from "chokidar";
+import glob from "fast-glob";
 import { existsSync, readFileSync } from "fs";
+import { copySync, removeSync } from "fs-extra";
+import { basename, extname } from "path";
+import ts from "typescript";
 
-// eslint-disable-next-line no-unused-vars
-import glob = require("fast-glob");
+//TODO Add run anyways option if errors happen
 
 let config = {
 		srcDir: "src",
 		outDir: "dist",
 		deleteObsolete: true,
 		tsconfig: "tsconfig.json",
-		file: "dist/index.js"
+		file: ""
 	},
 	child: ChildProcess = null,
 	copyTask: Promise<any>;
 
 const silentRun =
-	!process.argv.includes("-s") && !process.argv.includes("--silent");
+		!process.argv.includes("-s") && !process.argv.includes("--silent"),
+	tsConsolePrefix = chalk.bgBlue(chalk.bold(chalk.white(" TS "))) + " ",
+	dsConsolePrefix = chalk.yellow("</>  ");
 
 if (silentRun)
 	console.log(
-		chalk.yellow(
-			`DevScript v${require(__dirname + "/../package.json").version}`
+		chalk.yellowBright(
+			`${dsConsolePrefix}DevScript • v${
+				require(__dirname + "/../package.json").version
+			}`
 		)
 	);
 
@@ -49,7 +53,7 @@ if (!config.tsconfig) config.tsconfig = "tsconfig.json";
 const formatHost: ts.FormatDiagnosticsHost = {
 	getCanonicalFileName: (path) => path,
 	getCurrentDirectory: ts.sys.getCurrentDirectory,
-	getNewLine: () => ts.sys.newLine
+	getNewLine: () => ""
 };
 
 //* Create ts program
@@ -65,7 +69,12 @@ if (process.argv.includes("--copyOnly")) {
 	});
 
 	watcher.on("all", (path) => {
-		console.log(chalk.blue(`${basename(path)} changed. Restarting...`));
+		console.log(
+			dsConsolePrefix +
+				chalk.yellowBright(
+					`${chalk.cyan(basename(path))} updated, restarting...`
+				)
+		);
 		copyTask = copyFiles();
 
 		restartChild();
@@ -84,19 +93,38 @@ if (process.argv.includes("--copyOnly")) {
 
 function reportDiagnostic(diagnostic: ts.Diagnostic) {
 	if (silentRun)
-		console.log(chalk.redBright(ts.formatDiagnostic(diagnostic, formatHost)));
+		console.log(
+			tsConsolePrefix +
+				chalk.redBright(ts.formatDiagnostic(diagnostic, formatHost))
+		);
 }
 
 async function fileChange(diagnostic: ts.Diagnostic) {
 	if ([6031, 6032].includes(diagnostic.code)) {
-		if (silentRun) console.log(chalk.blue(diagnostic.messageText.toString()));
+		if (silentRun)
+			console.log(
+				tsConsolePrefix + chalk.cyan(diagnostic.messageText.toString())
+			);
 		copyTask = copyFiles();
-	} else if ([6194].includes(diagnostic.code)) {
-		if (silentRun) console.log(chalk.green(diagnostic.messageText.toString()));
+	} else if (
+		diagnostic.code === 6194 &&
+		parseInt(diagnostic.messageText.toString().replace(/\D/g, "")) === 0
+	) {
+		if (silentRun)
+			console.log(
+				tsConsolePrefix + chalk.green(diagnostic.messageText.toString())
+			);
 
 		restartChild();
-	} else if (silentRun)
-		console.log(chalk.yellow(diagnostic.messageText.toString()));
+	} else if (silentRun) {
+		if ([6193, 6194].includes(diagnostic.code)) {
+			console.log();
+			console.log(
+				tsConsolePrefix +
+					chalk.bold(chalk.redBright(diagnostic.messageText.toString()))
+			);
+		}
+	}
 }
 
 async function copyFiles() {
@@ -143,21 +171,21 @@ async function restartChild() {
 	//* Kill old child
 	//* Spawn new child
 	if (child && !child.killed) {
-		child.unref();
-		child.kill("SIGKILL");
+		child.kill("SIGINT");
 	}
 
 	await copyTask;
 
 	if (existsSync(process.cwd() + "/" + config.outDir + "/" + "index.js")) {
-		if (config.file)
+		if (config.file) {
 			child = fork(process.cwd() + "/" + config.file, [], {
 				cwd: config.outDir
 			});
-		else if (existsSync(process.cwd() + "/package.json")) {
+			return;
+		} else if (existsSync(process.cwd() + "/package.json")) {
 			const pjson = require(process.cwd() + "/package.json");
 
-			if (pjson.scripts && pjson.scripts.start)
+			if (pjson.scripts && pjson.scripts.start) {
 				child = spawn(
 					existsSync(process.cwd() + "/yarn.lock")
 						? "yarn run --silent start"
@@ -167,9 +195,26 @@ async function restartChild() {
 						stdio: "inherit"
 					}
 				);
-		} else
-			child = fork(process.cwd() + "/index.js", [], {
-				cwd: config.outDir
-			});
+				return;
+			}
+		}
+
+		child = fork(process.cwd() + "/" + config.outDir + "/index.js", [], {
+			cwd: config.outDir
+		});
+
+		child.on("exit", (code) => {
+			if (code === null) return;
+
+			console.log(
+				dsConsolePrefix +
+					chalk.yellowBright(
+						`Process exited with exit code ${chalk.yellow(
+							chalk.cyan(code)
+						)}, waiting for changes...`
+					)
+			);
+			child = null;
+		});
 	}
 }
