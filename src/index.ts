@@ -171,7 +171,8 @@ async function restartChild() {
 	//* Kill old child
 	//* Spawn new child
 	if (child && !child.killed) {
-		child.kill("SIGINT");
+		child.unref();
+		child.kill("SIGKILL");
 	}
 
 	await copyTask;
