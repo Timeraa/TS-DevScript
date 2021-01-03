@@ -9,7 +9,7 @@
 		"removeComments": true,
 		"outDir": "bin",
 		"newLine": "lf",
-		"sourceRoot": "src",
+		"sourceRoot": ".",
 		"baseUrl": ".",
 		"noUnusedParameters": true,
 		"noUnusedLocals": true
