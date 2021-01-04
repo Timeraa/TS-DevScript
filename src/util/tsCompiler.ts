@@ -66,9 +66,13 @@ function getDiagnostic(diagnostic: Diagnostic) {
 			diagnostic.file,
 			diagnostic.start!
 		),
-		message: diagnostic.messageText
-			.toString()
-			.replace(host.getCurrentDirectory() + "/", ""),
+		message:
+			typeof diagnostic.messageText !== "string"
+				? //TODO Maybe show it in more indents?
+				  diagnostic.messageText.messageText
+				: diagnostic.messageText
+						.toString()
+						.replace(host.getCurrentDirectory() + "/", ""),
 		code: diagnostic.code
 	});
 }
