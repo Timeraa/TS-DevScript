@@ -8,7 +8,7 @@ import copyTask from "./copyTask";
 
 export default async function runFileWatcher() {
 	const watcher = chokidar.watch(config.src, {
-		ignored: [/(\.ts)/g, config.ignore],
+		ignored: ["**/*.ts", config.ignore],
 		persistent: true,
 		cwd: process.cwd(),
 		ignoreInitial: true

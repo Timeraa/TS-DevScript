@@ -80,7 +80,7 @@ async function killOldChild() {
 			);
 			logger("Kill old child");
 		} catch (err) {
-			logger("Failed to kill old child");
+			logger("Failed to kill old child", err);
 		}
 		currentChild = null;
 	}

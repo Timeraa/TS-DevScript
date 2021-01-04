@@ -1,8 +1,13 @@
 import chalk from "chalk";
 import debug from "debug";
 import {
-	createSemanticDiagnosticsBuilderProgram, createWatchCompilerHost, createWatchProgram,
-	Diagnostic, getLineAndCharacterOfPosition, SemanticDiagnosticsBuilderProgram, sys,
+	createSemanticDiagnosticsBuilderProgram,
+	createWatchCompilerHost,
+	createWatchProgram,
+	Diagnostic,
+	getLineAndCharacterOfPosition,
+	SemanticDiagnosticsBuilderProgram,
+	sys,
 	WatchOfConfigFile
 } from "typescript";
 

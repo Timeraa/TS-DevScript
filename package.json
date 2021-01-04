@@ -1,7 +1,7 @@
 {
 	"name": "ts-devscript",
 	"description": "Simple development script to make working with TypeScript projects easy.",
-	"version": "2.0.0",
+	"version": "2.0.2",
 	"main": "index.js",
 	"repository": "git@github.com:Timeraa/DevScript.git",
 	"author": "Timeraa",
@@ -11,7 +11,7 @@
 	],
 	"license": "MPL-2.0",
 	"files": [
-		"bin/index.js"
+		"bin/*"
 	],
 	"bin": {
 		"devScript": "bin/index.js"
