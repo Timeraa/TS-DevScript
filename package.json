@@ -16,6 +16,19 @@
 	"bin": {
 		"devScript": "bin/index.js"
 	},
+	"keywords": [
+		"typescript",
+		"dev",
+		"autorestart"
+	],
+	"homepage": "https://github.com/Timeraa/DevScript#readme",
+	"bugs": {
+		"url": "https://github.com/Timeraa/DevScript/issues"
+	},
+	"funding": {
+		"type": "patreon",
+		"url": "https://patreon.com/Timeraa"
+	},
 	"dependencies": {
 		"chalk": "^4.1.0",
 		"chokidar": "^3.4.3",
