@@ -1,6 +1,6 @@
 import * as leasot from "leasot";
 
-import { basename, dirname, extname, join, relative } from "path";
+import { basename, extname, join, relative } from "path";
 import { config, dsConsolePrefix, name } from "../index";
 
 import chalk from "chalk";

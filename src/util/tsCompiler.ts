@@ -9,13 +9,13 @@ import {
 	sys
 } from "typescript";
 import { config, dsConsolePrefix, name } from "../";
-import { dirname, relative } from "path";
 
 import chalk from "chalk";
 import copyTask from "./copyTask";
 import debug from "debug";
 import { displayAsTree } from "./functions/displayAsTreePrefix";
 import outline from "./functions/outlineStrings";
+import { relative } from "path";
 import runChild from "./childHandler";
 
 let program: WatchOfConfigFile<SemanticDiagnosticsBuilderProgram>,
