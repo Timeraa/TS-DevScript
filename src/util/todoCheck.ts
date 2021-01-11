@@ -1,13 +1,14 @@
+import * as leasot from "leasot";
+
+import { basename, dirname, extname, join, relative } from "path";
+import { config, dsConsolePrefix, name } from "../index";
+
 import chalk from "chalk";
 import debug from "debug";
-import glob from "fast-glob";
-import { readFileSync } from "fs";
-import * as leasot from "leasot";
-import { basename, dirname, extname, join, relative } from "path";
-
-import { config, dsConsolePrefix, name } from "../index";
 import { displayAsTree } from "./functions/displayAsTreePrefix";
+import glob from "fast-glob";
 import outline from "./functions/outlineStrings";
+import { readFileSync } from "fs";
 
 const logger = debug(`${name}:todocheck`);
 
@@ -44,7 +45,7 @@ export default async function checkTodos() {
 				ref: todo.ref,
 				text: todo.text,
 				tag: todo.tag,
-				path: relative(dirname(process.cwd()), file).replace(/\\/g, "/")
+				path: relative(process.cwd(), file).replace(/\\/g, "/")
 			};
 
 			if (todos[todo.file]) todos[todo.file].push(todoObject);
