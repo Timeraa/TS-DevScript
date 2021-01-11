@@ -1,9 +1,9 @@
 import * as leasot from "leasot";
 
 import { basename, extname, join } from "path";
-import chalk, { hex } from "chalk";
 import { config, dsConsolePrefix, name } from "../index";
 
+import chalk from "chalk";
 import debug from "debug";
 import { displayAsTree } from "./functions/displayAsTreePrefix";
 import glob from "fast-glob";
@@ -34,7 +34,7 @@ export default async function checkTodos() {
 			{
 				extension: extname(file),
 				filename: basename(file),
-				customTags: config.todoTags.split(",")
+				customTags: config.todoTags ? config.todoTags.split(",") : []
 			}
 		);
 
