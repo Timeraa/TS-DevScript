@@ -15,12 +15,12 @@ export const dsConsolePrefix = "● ",
 		contributors: string[];
 	} = require("../package.json");
 
-import chalk from "chalk";
 import { basename } from "path";
-
 import cfg from "./util/configHandler";
-import copyTask from "./util/copyTask";
+import chalk from "chalk";
 import checkDeps from "./util/depCheck";
+import checkTodos from "./util/todoCheck";
+import copyTask from "./util/copyTask";
 import runFileWatcher from "./util/fileWatcher";
 import runTSCompiler from "./util/tsCompiler";
 
@@ -43,6 +43,7 @@ async function run() {
 	runFileWatcher();
 
 	if (config.depCheck) await checkDeps();
+	if (config.todoCheck) await checkTodos();
 
 	runTSCompiler();
 }

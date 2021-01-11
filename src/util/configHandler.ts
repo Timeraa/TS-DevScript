@@ -1,10 +1,16 @@
+import {
+	author,
+	contributors,
+	description,
+	dsConsolePrefix,
+	version
+} from "../";
+
 import chalk from "chalk";
 import cmdArgs from "command-line-args";
-import { resolve } from "path";
-
-import { author, contributors, description, dsConsolePrefix, version } from "../";
 import displayAsTree from "./functions/displayAsTree";
 import outline from "./functions/outlineStrings";
+import { resolve } from "path";
 
 interface config {
 	src: string;
@@ -13,6 +19,8 @@ interface config {
 	tsconfig: string;
 	entry: string;
 	depCheck: boolean;
+	todoCheck: boolean;
+	todoTags: string;
 	copyOnly: boolean;
 	watch: boolean;
 	ignore: string;
@@ -54,6 +62,8 @@ export default function run() {
 			{ name: "tsconfig", defaultValue: "tsconfig.json", type: String },
 			{ name: "entry", defaultValue: null, type: String },
 			{ name: "depCheck", defaultValue: true, type: String },
+			{ name: "todoCheck", defaultValue: true, type: String },
+			{ name: "todoTags", defaultValue: null, type: String },
 			{ name: "copyOnly", defaultValue: false, type: Boolean },
 			{ name: "ignore", defaultValue: null, type: String },
 			{ name: "include", defaultValue: null, type: String },
@@ -119,6 +129,15 @@ function showAvailableArgs(): void {
 		depCheck: {
 			type: "boolean",
 			description: "Whether or not to check the dependencies."
+		},
+		todoCheck: {
+			type: "boolean",
+			description: "Whether or not to check for TODO's."
+		},
+		todoTags: {
+			type: "string",
+			description:
+				"Custom tags to include in the TODO check. (String list seperated by commas)"
 		},
 		copyOnly: {
 			type: "boolean",

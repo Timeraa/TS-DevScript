@@ -1,20 +1,21 @@
-import chalk from "chalk";
-import debug from "debug";
 import {
+	Diagnostic,
+	SemanticDiagnosticsBuilderProgram,
+	WatchOfConfigFile,
 	createSemanticDiagnosticsBuilderProgram,
 	createWatchCompilerHost,
 	createWatchProgram,
-	Diagnostic,
 	getLineAndCharacterOfPosition,
-	SemanticDiagnosticsBuilderProgram,
-	sys,
-	WatchOfConfigFile
+	sys
 } from "typescript";
-
 import { config, dsConsolePrefix, name } from "../";
-import runChild from "./childHandler";
+
+import chalk from "chalk";
 import copyTask from "./copyTask";
+import debug from "debug";
+import { displayAsTree } from "./functions/displayAsTreePrefix";
 import outline from "./functions/outlineStrings";
+import runChild from "./childHandler";
 
 let program: WatchOfConfigFile<SemanticDiagnosticsBuilderProgram>,
 	host = createWatchCompilerHost(
@@ -141,25 +142,6 @@ function reportDiagnostics() {
 	}
 
 	diagnosticErrorArray = [];
-}
-
-function displayAsTree(
-	children: string[],
-	prefix = "",
-	color: chalk.Chalk = chalk.reset
-) {
-	console.log(
-		(children.length > 1
-			? `${prefix}├─ ` +
-			  children
-					.slice(0, -1)
-					.map((s) => color(s))
-					.join(`\n${prefix}├─ `) +
-			  "\n"
-			: "") +
-			`${prefix}╰─ ` +
-			color(children.slice(-1)[0])
-	);
 }
 
 async function fileChange(diagnostic: Diagnostic) {
