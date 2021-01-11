@@ -37,16 +37,18 @@ npx devScript
 ### Possile Arugments
 **Note:** These arguments can also be used in your `package.json` file, simply add the `devScript` property to the root of the `package.json` and use them as key-value pairs.
 
-| Options          | Type      | Description                                                       | Default         |
-| ---------------- | --------- | ----------------------------------------------------------------- | --------------- |
-| --help           |           | Shows the help command of devScript.                              |                 |
-| --src            | `string`  | Directory containing the source code.                             | `src`           |
-| --out            | `string`  | Directory that will contain the output.                           | `dist`          |
-| --deleteObsolete | `boolean` | Whether or not to delete files from out that are not in the src.  | `true`          |
-| --tsconfig       | `string`  | Path to a valid `tsconfig.json` file.                             | `tsconfig.json` |
-| --entry          | `string`  | Entry file to be executed after compilation.                      | `index.js`      |
-| --depCheck       | `boolean` | Whether or not to check the dependencies.                         | `true`          |
-| --copyOnly       | `boolean` | Whether or not only to copy the files from src to out.            | `false`         |
-| --ignore         | `string`  | Files that should be ignored when watching files. (glob pattern)  |                 |
-| --include        | `string`  | Files that should be included when watching files. (glob pattern) |                 |
-| --silent         | `boolean` | Whether or not to print console logs.                             | `false`         |
+| Options          | Type      | Description                                                                 | Default         |
+| ---------------- | --------- | --------------------------------------------------------------------------- | --------------- |
+| --help           |           | Shows the help command of devScript.                                        |                 |
+| --src            | `string`  | Directory containing the source code.                                       | `src`           |
+| --out            | `string`  | Directory that will contain the output.                                     | `dist`          |
+| --deleteObsolete | `boolean` | Whether or not to delete files from out that are not in the src.            | `true`          |
+| --tsconfig       | `string`  | Path to a valid `tsconfig.json` file.                                       | `tsconfig.json` |
+| --entry          | `string`  | Entry file to be executed after compilation.                                | `index.js`      |
+| --depCheck       | `boolean` | Whether or not to check the dependencies.                                   | `true`          |
+| --todoCheck      | `boolean` | Whether or not to check for TODO's.                                         |                 |
+| --todoTags       | `string`  | Custom tags to include in the TODO check. (String list seperated by commas) |                 |
+| --copyOnly       | `boolean` | Whether or not only to copy the files from src to out.                      | `false`         |
+| --ignore         | `string`  | Files that should be ignored when watching files. (glob pattern)            |                 |
+| --include        | `string`  | Files that should be included when watching files. (glob pattern)           |                 |
+| --silent         | `boolean` | Whether or not to print console logs.                                       | `false`         |
