@@ -1,14 +1,13 @@
-import * as leasot from "leasot";
-
-import { basename, extname, join } from "path";
-import { config, dsConsolePrefix, name } from "../index";
-
 import chalk from "chalk";
 import debug from "debug";
-import { displayAsTree } from "./functions/displayAsTreePrefix";
 import glob from "fast-glob";
-import outline from "./functions/outlineStrings";
 import { readFileSync } from "fs";
+import * as leasot from "leasot";
+import { basename, dirname, extname, join, relative } from "path";
+
+import { config, dsConsolePrefix, name } from "../index";
+import { displayAsTree } from "./functions/displayAsTreePrefix";
+import outline from "./functions/outlineStrings";
 
 const logger = debug(`${name}:todocheck`);
 
@@ -40,25 +39,16 @@ export default async function checkTodos() {
 
 		fileTodos.forEach((todo) => {
 			count++;
-			if (todos[todo.file]) {
-				todos[todo.file].push({
-					line: todo.line,
-					ref: todo.ref,
-					text: todo.text,
-					tag: todo.tag,
-					path: join(process.cwd(), file)
-				});
-			} else {
-				todos[todo.file] = [
-					{
-						line: todo.line,
-						ref: todo.ref,
-						text: todo.text,
-						tag: todo.tag,
-						path: join(process.cwd(), file)
-					}
-				];
-			}
+			const todoObject = {
+				line: todo.line,
+				ref: todo.ref,
+				text: todo.text,
+				tag: todo.tag,
+				path: relative(dirname(process.cwd()), file).replace(/\\/g, "/")
+			};
+
+			if (todos[todo.file]) todos[todo.file].push(todoObject);
+			else todos[todo.file] = [todoObject];
 		});
 	}
 

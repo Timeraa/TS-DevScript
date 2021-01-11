@@ -38,6 +38,7 @@
 		"fast-glob": "^3.2.4",
 		"fs-extra": "^9.0.1",
 		"leasot": "^11.5.0",
+		"source-map-support": "^0.5.19",
 		"tree-kill": "^1.2.2",
 		"typescript": "^4.1.3"
 	},

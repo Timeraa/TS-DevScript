@@ -1,21 +1,17 @@
-import {
-	Diagnostic,
-	SemanticDiagnosticsBuilderProgram,
-	WatchOfConfigFile,
-	createSemanticDiagnosticsBuilderProgram,
-	createWatchCompilerHost,
-	createWatchProgram,
-	getLineAndCharacterOfPosition,
-	sys
-} from "typescript";
-import { config, dsConsolePrefix, name } from "../";
-
 import chalk from "chalk";
-import copyTask from "./copyTask";
 import debug from "debug";
+import { dirname, relative } from "path";
+import {
+	createSemanticDiagnosticsBuilderProgram, createWatchCompilerHost, createWatchProgram,
+	Diagnostic, getLineAndCharacterOfPosition, SemanticDiagnosticsBuilderProgram, sys,
+	WatchOfConfigFile
+} from "typescript";
+
+import { config, dsConsolePrefix, name } from "../";
+import runChild from "./childHandler";
+import copyTask from "./copyTask";
 import { displayAsTree } from "./functions/displayAsTreePrefix";
 import outline from "./functions/outlineStrings";
-import runChild from "./childHandler";
 
 let program: WatchOfConfigFile<SemanticDiagnosticsBuilderProgram>,
 	host = createWatchCompilerHost(
@@ -96,9 +92,11 @@ function reportDiagnostics() {
 
 		//* File src message coloring
 		const fileSrcMsg = chalk.hex("#bebebe")(
-			`${chalk.yellowBright(diagnostic.file)}(${
-				diagnostic.diagnosticLine.line + 1
-			},${diagnostic.diagnosticLine.character + 1})`
+			`${chalk.yellowBright(
+				relative(dirname(process.cwd()), diagnostic.file).replace(/\\/g, "/")
+			)}(${diagnostic.diagnosticLine.line + 1},${
+				diagnostic.diagnosticLine.character + 1
+			})`
 		);
 
 		result[diagnostic.code].push(
