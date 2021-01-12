@@ -1,7 +1,7 @@
 {
 	"name": "ts-devscript",
 	"description": "Simple development script to make working with TypeScript projects easy.",
-	"version": "2.1.0",
+	"version": "2.1.1",
 	"main": "index.js",
 	"repository": "git@github.com:Timeraa/DevScript.git",
 	"author": "Timeraa",
@@ -31,7 +31,7 @@
 	},
 	"dependencies": {
 		"chalk": "^4.1.0",
-		"chokidar": "^3.4.3",
+		"chokidar": "^3.5.0",
 		"command-line-args": "^5.1.1",
 		"debug": "^4.3.1",
 		"depcheck": "^1.3.1",
@@ -46,9 +46,9 @@
 		"@types/command-line-args": "^5.0.0",
 		"@types/debug": "^4.1.5",
 		"@types/fs-extra": "^9.0.6",
-		"@types/node": "^14.14.16",
-		"@typescript-eslint/eslint-plugin": "^4.11.0",
-		"@typescript-eslint/parser": "^4.11.0",
-		"eslint": "^7.16.0"
+		"@types/node": "^14.14.20",
+		"@typescript-eslint/eslint-plugin": "^4.12.0",
+		"@typescript-eslint/parser": "^4.12.0",
+		"eslint": "^7.17.0"
 	}
 }
