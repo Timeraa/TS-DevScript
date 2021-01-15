@@ -10,6 +10,9 @@
 		"TheDropX"
 	],
 	"license": "MPL-2.0",
+	"scripts": {
+		"build": "rimraf bin && tsc --skipLibCheck"
+	},
 	"files": [
 		"bin/*"
 	],
