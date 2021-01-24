@@ -35,7 +35,7 @@ async function run() {
 	if (!config.silent)
 		console.log(
 			chalk.green(
-				`${chalk.white(dsConsolePrefix)} Launching ${chalk.bold(
+				`${chalk.white(dsConsolePrefix)}Launching ${chalk.bold(
 					"DevScript"
 				)} ${chalk.hex("#bebebe")("(v" + version + ")")} on ${chalk.bold(
 					basename(process.cwd())
@@ -46,7 +46,7 @@ async function run() {
 	runFileWatcher();
 
 	if (config.depCheck) await checkDeps();
-	if (config.todoCheck) await checkTodos();
+	if (!config.silent && config.todoCheck) await checkTodos();
 
 	runTSCompiler();
 }

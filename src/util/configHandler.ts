@@ -8,9 +8,9 @@ import {
 
 import chalk from "chalk";
 import cmdArgs from "command-line-args";
-import displayAsTree from "./functions/displayAsTree";
 import outline from "./functions/outlineStrings";
 import { resolve } from "path";
+import { DisplayAsTree } from "displayastree";
 
 interface config {
 	src: string;
@@ -19,6 +19,14 @@ interface config {
 	tsconfig: string;
 	entry: string;
 	depCheck: boolean;
+	excludeDeps: string;
+	autoInstallDep: boolean;
+	autoRemoveDep: boolean;
+	autoInstallTypes: boolean;
+	autoRemoveTypes: boolean;
+	autoUpdateOutdated: boolean;
+	autoUpdateDeprecated: boolean;
+	updateSelector: boolean;
 	todoCheck: boolean;
 	todoTags: string;
 	copyOnly: boolean;
@@ -33,15 +41,15 @@ export default function run() {
 
 	try {
 		if (process.argv.includes("-h") || process.argv.includes("--help")) {
-			displayAsTree(
-				dsConsolePrefix +
-					" " +
-					chalk.green(
-						`${chalk.bold("DevScript")} ${chalk.hex("#bebebe")(
-							"(v" + version + ")"
-						)}`
-					),
-				[
+			new DisplayAsTree(
+				chalk.green(
+					`${chalk.bold("DevScript")} ${chalk.hex("#bebebe")(
+						"(v" + version + ")"
+					)}`
+				),
+				{ startChar: dsConsolePrefix + " " }
+			)
+				.addSection([
 					chalk.hex("#7289DA")(description),
 					chalk.hex("#ebc14d")(`Author: ${chalk.hex("#bebebe")(author)}`),
 					chalk.hex("#ebc14d")(
@@ -49,8 +57,8 @@ export default function run() {
 							"#bebebe"
 						)(contributors.join(chalk.hex("#ebc14d")(", ")))}`
 					)
-				]
-			);
+				])
+				.log();
 			showAvailableArgs();
 			process.exit();
 		}
@@ -62,6 +70,14 @@ export default function run() {
 			{ name: "tsconfig", defaultValue: "tsconfig.json", type: String },
 			{ name: "entry", defaultValue: null, type: String },
 			{ name: "depCheck", defaultValue: true, type: String },
+			{ name: "excludeDeps", defaultValue: null, type: String },
+			{ name: "autoInstallDep", defaultValue: true, type: Boolean },
+			{ name: "autoRemoveDep", defaultValue: true, type: Boolean },
+			{ name: "autoInstallTypes", defaultValue: true, type: Boolean },
+			{ name: "autoRemoveTypes", defaultValue: true, type: Boolean },
+			{ name: "autoUpdateOutdated", defaultValue: false, type: Boolean },
+			{ name: "autoUpdateDeprecated", defaultValue: false, type: Boolean },
+			{ name: "updateSelector", defaultValue: true, type: Boolean },
 			{ name: "todoCheck", defaultValue: true, type: String },
 			{ name: "todoTags", defaultValue: null, type: String },
 			{ name: "copyOnly", defaultValue: false, type: Boolean },
@@ -130,6 +146,46 @@ function showAvailableArgs(): void {
 			type: "boolean",
 			description: "Whether or not to check the dependencies."
 		},
+		excludeDeps: {
+			type: "string",
+			description:
+				"Dependencies to exclude from automatically uninstalling. (String list seperated by commas)"
+		},
+		autoInstallDep: {
+			type: "boolean",
+			description:
+				"Automatically installs missing dependencies. (Needs depCheck enabled)"
+		},
+		autoRemoveDep: {
+			type: "boolean",
+			description:
+				"Automatically removes unused dependencies. (Needs depCheck enabled)"
+		},
+		autoInstallTypes: {
+			type: "boolean",
+			description:
+				"Automatically installs missing dependencies @types/. (Needs depCheck and autoInstallDep enabled)"
+		},
+		autoRemoveTypes: {
+			type: "boolean",
+			description:
+				"Automatically removes unused dependencies @types/. (Needs depCheck and autoRemoveDep enabled)"
+		},
+		autoUpdateOutdated: {
+			type: "boolean",
+			description:
+				"Automatically update outdated dependencies to their latest version. (Needs depCheck enabled)"
+		},
+		autoUpdateDeprecated: {
+			type: "boolean",
+			description:
+				"Automatically update deprecated dependencies to their latest version. (Needs depCheck enabled)"
+		},
+		updateSelector: {
+			type: "boolean",
+			description:
+				"Whether or not to show the update selector for deprecated or outdated dependencies. (Needs depCheck enabled)"
+		},
 		todoCheck: {
 			type: "boolean",
 			description: "Whether or not to check for TODO's."
@@ -141,7 +197,7 @@ function showAvailableArgs(): void {
 		},
 		copyOnly: {
 			type: "boolean",
-			description: "Whether or not only to copy the files from src to out"
+			description: "Whether or not only to copy the files from src to out."
 		},
 		ignore: {
 			type: "string",
@@ -167,8 +223,9 @@ function showAvailableArgs(): void {
 		);
 	}
 	outline(settings, "•");
-	displayAsTree(
-		`${dsConsolePrefix} ${chalk.bold(chalk.green("Available arguments"))}`,
-		settings
-	);
+	new DisplayAsTree(chalk.bold(chalk.green("Available arguments")), {
+		startChar: dsConsolePrefix + " "
+	})
+		.addSection(settings)
+		.log();
 }

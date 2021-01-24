@@ -5,7 +5,7 @@ import { config, dsConsolePrefix, name } from "../index";
 
 import chalk from "chalk";
 import debug from "debug";
-import { displayAsTree } from "./functions/displayAsTreePrefix";
+import { DisplayAsTree, TreeSection } from "displayastree";
 import glob from "fast-glob";
 import outline from "./functions/outlineStrings";
 import { readFileSync } from "fs";
@@ -77,32 +77,23 @@ export default async function checkTodos() {
 		);
 	});
 
-	logger(`TODO check finished. Found ${count} TODO's.`);
+	logger(`TODO check finished. Found ${count} TODO${count > 1 ? "'s" : ""}.`);
 
-	if (Object.keys(finalObj).length > 0) {
-		console.log(
-			`${dsConsolePrefix} ${chalk.hex("#FF8C00")(
-				"Found " + count + " TODO's…"
-			)}`
+	if (Object.keys(finalObj).length) {
+		const tree = new DisplayAsTree(
+			chalk.hex("#FF8C00")(`Found ${count} TODO${count > 1 ? "'s" : ""}…"`),
+			{
+				startChar: dsConsolePrefix + " "
+			}
 		);
-		let i = 0;
+		const sections: TreeSection[] = [];
 		for (const [fileName, todoArray] of Object.entries(finalObj)) {
 			//* Spacing between src and error message.
 			outline(todoArray, "•");
-
-			i++;
-			if (Object.keys(finalObj).length > 1) {
-				if (Object.keys(finalObj).length === i) {
-					console.log(`╰─ ${chalk.bold(chalk.cyan(fileName))}`);
-					displayAsTree(todoArray, "   ");
-				} else {
-					console.log(`├─ ${chalk.bold(chalk.cyan(fileName))}`);
-					displayAsTree(todoArray, "│  ");
-				}
-			} else {
-				console.log(`╰─ ${chalk.bold(chalk.cyan(fileName))}`);
-				displayAsTree(todoArray, "   ");
-			}
+			sections.push(
+				new TreeSection(chalk.bold(chalk.cyan(fileName))).addSection(todoArray)
+			);
 		}
+		tree.addSection(sections).log();
 	}
 }

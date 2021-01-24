@@ -1,22 +1,22 @@
+import chalk from "chalk";
+import debug from "debug";
+import { DisplayAsTree, TreeSection } from "displayastree";
+import { relative } from "path";
 import {
-	Diagnostic,
-	SemanticDiagnosticsBuilderProgram,
-	WatchOfConfigFile,
 	createSemanticDiagnosticsBuilderProgram,
 	createWatchCompilerHost,
 	createWatchProgram,
+	Diagnostic,
 	getLineAndCharacterOfPosition,
-	sys
+	SemanticDiagnosticsBuilderProgram,
+	sys,
+	WatchOfConfigFile
 } from "typescript";
-import { config, dsConsolePrefix, name } from "../";
 
-import chalk from "chalk";
-import copyTask from "./copyTask";
-import debug from "debug";
-import { displayAsTree } from "./functions/displayAsTreePrefix";
-import outline from "./functions/outlineStrings";
-import { relative } from "path";
+import { config, dsConsolePrefix, name } from "../";
 import runChild from "./childHandler";
+import copyTask from "./copyTask";
+import outline from "./functions/outlineStrings";
 
 let program: WatchOfConfigFile<SemanticDiagnosticsBuilderProgram>,
 	host = createWatchCompilerHost(
@@ -111,9 +111,19 @@ function reportDiagnostics() {
 	logger("Transferred array to object, now posting errors by error ID…");
 	//#endregion
 
-	//* Error header
-	console.log(
-		`${dsConsolePrefix} ${chalk.bold(
+	const sections: TreeSection[] = [];
+	for (const [errorCode, errorArray] of Object.entries(result)) {
+		//* Spacing between src and error message.
+		outline(errorArray, "•");
+		sections.push(
+			new TreeSection(chalk.bold(chalk.redBright("TS" + errorCode))).addSection(
+				errorArray
+			)
+		);
+	}
+
+	new DisplayAsTree(
+		chalk.bold(
 			chalk.hex("#e83a3a")(
 				"Found " +
 					diagnosticErrorArray.length +
@@ -121,28 +131,13 @@ function reportDiagnostics() {
 					(diagnosticErrorArray.length === 1 ? "" : "s") +
 					". Watching for file changes…"
 			)
-		)}`
-	);
-
-	let i = 0;
-	for (const [errorCode, errorArray] of Object.entries(result)) {
-		//* Spacing between src and error message.
-		outline(errorArray, "•");
-
-		i++;
-		if (Object.keys(result).length > 1) {
-			if (Object.keys(result).length === i) {
-				console.log(`╰─ ${chalk.bold(chalk.redBright("TS" + errorCode))}`);
-				displayAsTree(errorArray, "   ");
-			} else {
-				console.log(`├─ ${chalk.bold(chalk.redBright("TS" + errorCode))}`);
-				displayAsTree(errorArray, "│  ");
-			}
-		} else {
-			console.log(`╰─ ${chalk.bold(chalk.redBright("TS" + errorCode))}`);
-			displayAsTree(errorArray, "   ");
+		),
+		{
+			startChar: dsConsolePrefix
 		}
-	}
+	)
+		.addSection(sections)
+		.log();
 
 	diagnosticErrorArray = [];
 }
@@ -152,9 +147,7 @@ async function fileChange(diagnostic: Diagnostic) {
 	if (diagnostic.code === 6031) {
 		if (!config.silent)
 			console.log(
-				`${dsConsolePrefix} ${chalk.blueBright(
-					"Starting TypeScript compiler…"
-				)}`
+				`${dsConsolePrefix}${chalk.blueBright("Starting TypeScript compiler…")}`
 			);
 		return;
 	}
@@ -163,7 +156,7 @@ async function fileChange(diagnostic: Diagnostic) {
 	if (diagnostic.code === 6032) {
 		if (!config.silent)
 			console.log(
-				`${dsConsolePrefix} ${chalk.blueBright(
+				`${dsConsolePrefix}${chalk.blueBright(
 					diagnostic.messageText
 						.toString()
 						.substring(0, diagnostic.messageText.toString().length - 3) + "…"
@@ -185,7 +178,6 @@ async function fileChange(diagnostic: Diagnostic) {
 		if (!config.silent)
 			console.log(
 				dsConsolePrefix +
-					" " +
 					chalk.green(
 						diagnostic.messageText
 							.toString()

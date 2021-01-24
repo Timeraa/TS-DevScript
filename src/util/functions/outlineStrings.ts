@@ -6,12 +6,18 @@ export default function outline(stringArray: string[], splitter: string) {
 	let highestLength = 0;
 	//* Check if message length is higher then highestLength, if so set.
 	stringArray.forEach((message) => {
-		if (message.split(splitter)[0].length > highestLength)
+		if (
+			message.includes(splitter) &&
+			message.split(splitter)[0].length > highestLength
+		)
 			highestLength = message.split(splitter)[0].length;
 	});
 	//* Add spaces to the error messages to they match the highestLength.
 	stringArray.forEach((message, index) => {
-		if (message.split(splitter)[0].length !== highestLength) {
+		if (
+			message.includes(splitter) &&
+			message.split(splitter)[0].length !== highestLength
+		) {
 			const difference = highestLength - message.split(splitter)[0].length;
 			let newMessage = message.split(splitter)[0];
 			for (let i = 0; i < difference; i++) {
