@@ -308,10 +308,10 @@ at-least-node@^1.0.0:
   resolved "https://registry.yarnpkg.com/at-least-node/-/at-least-node-1.0.0.tgz#602cd4b46e844ad4effc92a8011a3c46e0238dc2"
   integrity sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==
 
-autopm@^1.2.9:
-  version "1.2.9"
-  resolved "https://registry.yarnpkg.com/autopm/-/autopm-1.2.9.tgz#d1e559be5a11fc9a4ff27ea897d1bc3f04dfd10f"
-  integrity sha512-/dy1BPvRCKsy6+7mipXlz1YHxk3op/PmoO6JSxD5wN0xrK7sAu94siPxt14Ol5jUyz7LWTCETpygL94A+CUKPw==
+autopm@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/autopm/-/autopm-1.3.0.tgz#689c10ddddc7b4f0603124ed0226d32823cfa89e"
+  integrity sha512-k0ywmxLflDOdr9JnsY0J8394rBsQRtIosJw12td3q2akpFBWAHpKDrB89WlcIsejgkZZF7mXrc1T7xrE2RDnDQ==
   dependencies:
     builtin-modules "^3.2.0"
     compare-versions "^3.6.0"
