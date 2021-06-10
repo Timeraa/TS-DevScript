@@ -1,22 +1,22 @@
-import chalk from "chalk";
-import debug from "debug";
-import { DisplayAsTree, TreeSection } from "displayastree";
-import { relative } from "path";
+import { Branch, Tree } from "displayastree";
 import {
+	Diagnostic,
+	SemanticDiagnosticsBuilderProgram,
+	WatchOfConfigFile,
 	createSemanticDiagnosticsBuilderProgram,
 	createWatchCompilerHost,
 	createWatchProgram,
-	Diagnostic,
 	getLineAndCharacterOfPosition,
-	SemanticDiagnosticsBuilderProgram,
-	sys,
-	WatchOfConfigFile
+	sys
 } from "typescript";
-
 import { config, dsConsolePrefix, name } from "../";
-import runChild from "./childHandler";
+
+import chalk from "chalk";
 import copyTask from "./copyTask";
+import debug from "debug";
 import outline from "./functions/outlineStrings";
+import { relative } from "path";
+import runChild from "./childHandler";
 
 let program: WatchOfConfigFile<SemanticDiagnosticsBuilderProgram>,
 	host = createWatchCompilerHost(
@@ -111,18 +111,18 @@ function reportDiagnostics() {
 	logger("Transferred array to object, now posting errors by error ID…");
 	//#endregion
 
-	const sections: TreeSection[] = [];
+	const sections: Branch[] = [];
 	for (const [errorCode, errorArray] of Object.entries(result)) {
 		//* Spacing between src and error message.
 		outline(errorArray, "•");
 		sections.push(
-			new TreeSection(chalk.bold(chalk.redBright("TS" + errorCode))).addSection(
+			new Branch(chalk.bold(chalk.redBright("TS" + errorCode))).addBranch(
 				errorArray
 			)
 		);
 	}
 
-	new DisplayAsTree(
+	new Tree(
 		chalk.bold(
 			chalk.hex("#e83a3a")(
 				"Found " +
@@ -133,10 +133,10 @@ function reportDiagnostics() {
 			)
 		),
 		{
-			startChar: dsConsolePrefix
+			headChar: dsConsolePrefix
 		}
 	)
-		.addSection(sections)
+		.addBranch(sections)
 		.log();
 
 	diagnosticErrorArray = [];

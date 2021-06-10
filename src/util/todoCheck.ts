@@ -1,11 +1,11 @@
 import * as leasot from "leasot";
 
+import { Branch, Tree } from "displayastree";
 import { basename, extname, join, relative } from "path";
 import { config, dsConsolePrefix, name } from "../index";
 
 import chalk from "chalk";
 import debug from "debug";
-import { DisplayAsTree, TreeSection } from "displayastree";
 import glob from "fast-glob";
 import outline from "./functions/outlineStrings";
 import { readFileSync } from "fs";
@@ -80,20 +80,20 @@ export default async function checkTodos() {
 	logger(`TODO check finished. Found ${count} TODO${count > 1 ? "'s" : ""}.`);
 
 	if (Object.keys(finalObj).length) {
-		const tree = new DisplayAsTree(
+		const tree = new Tree(
 			chalk.hex("#FF8C00")(`Found ${count} TODO${count > 1 ? "'s" : ""}…"`),
 			{
-				startChar: dsConsolePrefix + " "
+				headChar: dsConsolePrefix + " "
 			}
 		);
-		const sections: TreeSection[] = [];
+		const sections: Branch[] = [];
 		for (const [fileName, todoArray] of Object.entries(finalObj)) {
 			//* Spacing between src and error message.
 			outline(todoArray, "•");
 			sections.push(
-				new TreeSection(chalk.bold(chalk.cyan(fileName))).addSection(todoArray)
+				new Branch(chalk.bold(chalk.cyan(fileName))).addBranch(todoArray)
 			);
 		}
-		tree.addSection(sections).log();
+		tree.addBranch(sections).log();
 	}
 }

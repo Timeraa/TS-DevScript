@@ -6,11 +6,11 @@ import {
 	version
 } from "../";
 
+import { Tree } from "displayastree";
 import chalk from "chalk";
 import cmdArgs from "command-line-args";
 import outline from "./functions/outlineStrings";
 import { resolve } from "path";
-import { DisplayAsTree } from "displayastree";
 
 interface config {
 	src: string;
@@ -39,37 +39,37 @@ interface config {
 export default function run() {
 	let config: config;
 
-	try {
-		if (process.argv.includes("-h") || process.argv.includes("--help")) {
-			new DisplayAsTree(
-				chalk.green(
-					`${chalk.bold("DevScript")} ${chalk.hex("#bebebe")(
-						"(v" + version + ")"
-					)}`
-				),
-				{ startChar: dsConsolePrefix + " " }
-			)
-				.addSection([
-					chalk.hex("#7289DA")(description),
-					chalk.hex("#ebc14d")(`Author: ${chalk.hex("#bebebe")(author)}`),
-					chalk.hex("#ebc14d")(
-						`Contributor${contributors.length === 1 ? "" : "s"}: ${chalk.hex(
-							"#bebebe"
-						)(contributors.join(chalk.hex("#ebc14d")(", ")))}`
-					)
-				])
-				.log();
-			showAvailableArgs();
-			process.exit();
-		}
+	if (process.argv.includes("-h") || process.argv.includes("--help")) {
+		new Tree(
+			chalk.green(
+				`${chalk.bold("DevScript")} ${chalk.hex("#bebebe")(
+					"(v" + version + ")"
+				)}`
+			),
+			{ headChar: dsConsolePrefix + " " }
+		)
+			.addBranch([
+				chalk.hex("#7289DA")(description),
+				chalk.hex("#ebc14d")(`Author: ${chalk.hex("#bebebe")(author)}`),
+				chalk.hex("#ebc14d")(
+					`Contributor${contributors.length === 1 ? "" : "s"}: ${chalk.hex(
+						"#bebebe"
+					)(contributors.join(chalk.hex("#ebc14d")(", ")))}`
+				)
+			])
+			.log();
+		showAvailableArgs();
+		process.exit();
+	}
 
-		config = cmdArgs([
+	config = cmdArgs(
+		[
 			{ name: "src", defaultValue: "src", type: String },
 			{ name: "out", defaultValue: "dist", type: String },
 			{ name: "deleteObsolete", defaultValue: true, type: String },
 			{ name: "tsconfig", defaultValue: "tsconfig.json", type: String },
 			{ name: "entry", defaultValue: null, type: String },
-			{ name: "depCheck", defaultValue: true, type: String },
+			{ name: "depCheck", defaultValue: false, type: String },
 			{ name: "excludeDeps", defaultValue: null, type: String },
 			{ name: "autoInstallDep", defaultValue: true, type: Boolean },
 			{ name: "autoRemoveDep", defaultValue: true, type: Boolean },
@@ -84,32 +84,25 @@ export default function run() {
 			{ name: "ignore", defaultValue: null, type: String },
 			{ name: "include", defaultValue: null, type: String },
 			{ name: "silent", alias: "s", defaultValue: false, type: Boolean }
-		]) as any;
+		],
+		{ stopAtFirstUnknown: false, partial: true }
+	) as any;
 
-		if (typeof config.depCheck === "string")
-			config.depCheck = Boolean(config.depCheck);
-		if (typeof config.deleteObsolete === "string")
-			config.deleteObsolete = Boolean(config.deleteObsolete);
+	if (typeof config.depCheck === "string")
+		config.depCheck = Boolean(config.depCheck);
+	if (typeof config.deleteObsolete === "string")
+		config.deleteObsolete = Boolean(config.deleteObsolete);
 
-		//* Take possible config values from package.json of project
-		try {
-			const pkgJson = require(resolve(process.cwd(), "package.json"));
+	//* Take possible config values from package.json of project
+	try {
+		const pkgJson = require(resolve(process.cwd(), "package.json"));
 
-			if (pkgJson.devScript) {
-				for (let key in pkgJson.devScript) {
-					if (config[key]) config[key] = pkgJson.devScript[key];
-				}
+		if (pkgJson.devScript) {
+			for (let key in pkgJson.devScript) {
+				if (config[key]) config[key] = pkgJson.devScript[key];
 			}
-		} catch (e) {}
-	} catch (e) {
-		console.log(
-			`${dsConsolePrefix} ${chalk.hex("#e83a3a")(
-				`Unknown argument "${chalk.bold(e.optionName)}"…`
-			)}`
-		);
-		showAvailableArgs();
-		process.exit();
-	}
+		}
+	} catch (e) {}
 
 	return config;
 }
@@ -223,9 +216,9 @@ function showAvailableArgs(): void {
 		);
 	}
 	outline(settings, "•");
-	new DisplayAsTree(chalk.bold(chalk.green("Available arguments")), {
-		startChar: dsConsolePrefix + " "
+	new Tree(chalk.bold(chalk.green("Available arguments")), {
+		headChar: dsConsolePrefix + " "
 	})
-		.addSection(settings)
+		.addBranch(settings)
 		.log();
 }

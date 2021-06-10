@@ -1,15 +1,15 @@
+import { Branch, Tree } from "displayastree";
+import { config, dsConsolePrefix, name } from "../index";
+import { lockData, updateLock, validateLock } from "./lockHandler";
+
 import AutoPM from "autopm";
 import chalk from "chalk";
 import { compare } from "compare-versions";
 import debug from "debug";
-import { DisplayAsTree, TreeSection } from "displayastree";
 import { sync as glob } from "fast-glob";
 import inquirer from "inquirer";
 import ora from "ora";
-
-import { config, dsConsolePrefix, name } from "../index";
 import outline from "./functions/outlineStrings";
-import { lockData, updateLock, validateLock } from "./lockHandler";
 
 const logger = debug(`${name}:depcheck`),
 	spinnerSettings = {
@@ -52,7 +52,7 @@ export default async function checkDeps(showErrors = true) {
 		`Dependency check results: ${aPM.unusedModules.length} unused, ${aPM.missingModules.length} missing`
 	);
 
-	const sections: TreeSection[] = [];
+	const sections: Branch[] = [];
 	if (!config.silent && aPM.deprecatedModules.length && showErrors) {
 		const deprecatedModules = aPM.deprecatedModules.map(
 			(m) =>
@@ -65,39 +65,39 @@ export default async function checkDeps(showErrors = true) {
 		outline(deprecatedModules, "•");
 
 		sections.push(
-			new TreeSection(
+			new Branch(
 				chalk.hex("#cf47de")(chalk.bold("Deprecated dependencies"))
-			).addSection(deprecatedModules)
+			).addBranch(deprecatedModules)
 		);
 	}
 
 	if (!config.silent && aPM.outdatedModules.length && showErrors)
 		sections.push(
-			new TreeSection(
+			new Branch(
 				chalk.hex("#3242a8")(chalk.bold("Outdated dependencies"))
-			).addSection(
+			).addBranch(
 				aPM.outdatedModules.map((m) => chalk.hex("#6ea2f5")(m.module))
 			)
 		);
 
 	if (!config.silent && aPM.missingModules.length && showErrors)
 		sections.push(
-			new TreeSection(chalk.red(chalk.bold("Missing dependencies"))).addSection(
+			new Branch(chalk.red(chalk.bold("Missing dependencies"))).addBranch(
 				aPM.missingModules.map((c) => chalk.red(c))
 			)
 		);
 
 	if (!config.silent && aPM.unusedModules.length && showErrors)
 		sections.push(
-			new TreeSection(
+			new Branch(
 				chalk.yellowBright(chalk.bold("Unused dependencies"))
-			).addSection(aPM.unusedModules.map((c) => chalk.yellowBright(c)))
+			).addBranch(aPM.unusedModules.map((c) => chalk.yellowBright(c)))
 		);
 
 	if (sections.length) {
 		console.log(
-			new DisplayAsTree("", { startChar: dsConsolePrefix })
-				.addSection(sections)
+			new Tree("", { headChar: dsConsolePrefix })
+				.addBranch(sections)
 				.getAsString()
 				.split("\n")
 				.filter((s) => s !== dsConsolePrefix)
@@ -663,9 +663,7 @@ export default async function checkDeps(showErrors = true) {
 		const installed = aPM.changedModules.filter((m) => m.type === "INSTALLED"),
 			updated = aPM.changedModules.filter((m) => m.type === "UPDATED"),
 			removed = aPM.changedModules.filter((m) => m.type === "REMOVED"),
-			tree = new DisplayAsTree(
-				chalk.hex("#17E35E")("Summary of dependency changes…")
-			);
+			tree = new Tree(chalk.hex("#17E35E")("Summary of dependency changes…"));
 
 		if (installed.length) {
 			const stringArray = installed.map(
@@ -677,8 +675,8 @@ export default async function checkDeps(showErrors = true) {
 			);
 			outline(stringArray, "•");
 			outline(stringArray, "|");
-			tree.addSection([
-				new TreeSection(chalk.green("Installed")).addSection(
+			tree.addBranch([
+				new Branch(chalk.green("Installed")).addBranch(
 					stringArray.map((m) => m.replace("|", "•"))
 				)
 			]);
@@ -697,8 +695,8 @@ export default async function checkDeps(showErrors = true) {
 			outline(stringArray, "•");
 			outline(stringArray, "!");
 			outline(stringArray, "|");
-			tree.addSection([
-				new TreeSection(chalk.hex("#6ea2f5")("Updated")).addSection(
+			tree.addBranch([
+				new Branch(chalk.hex("#6ea2f5")("Updated")).addBranch(
 					stringArray.map((m) => m.replace("!", "").replace("|", "•"))
 				)
 			]);
@@ -714,8 +712,8 @@ export default async function checkDeps(showErrors = true) {
 			);
 			outline(stringArray, "•");
 			outline(stringArray, "|");
-			tree.addSection([
-				new TreeSection(chalk.red("Removed")).addSection(
+			tree.addBranch([
+				new Branch(chalk.red("Removed")).addBranch(
 					stringArray.map((m) => m.replace("|", "•"))
 				)
 			]);

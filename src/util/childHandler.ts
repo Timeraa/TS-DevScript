@@ -1,11 +1,11 @@
-import chalk from "chalk";
 import { ChildProcess, fork, spawn } from "child_process";
+import { config, dsConsolePrefix, name } from "../";
+
+import chalk from "chalk";
 import debug from "debug";
 import { pathExists } from "fs-extra";
 import { resolve } from "path";
 import treeKill from "tree-kill";
-
-import { config, dsConsolePrefix, name } from "../";
 
 let currentChild: ChildProcess | null = null;
 const logger = debug(`${name}:childHandler`);
@@ -27,8 +27,11 @@ export default async function runChild() {
 			(await pathExists(process.cwd() + "/yarn.lock"))
 				? "yarn run --silent start"
 				: "npm run --silent start",
+			process.argv,
 			{
 				cwd: process.cwd(),
+				argv0: process.argv0,
+				env: process.env,
 				shell: true,
 				stdio: "inherit"
 			}
@@ -44,9 +47,10 @@ export default async function runChild() {
 		logger("Starting with entry index.js");
 		currentChild = fork(
 			config.entry ? config.entry : resolve(config.out, "index.js"),
-			[],
+			process.argv,
 			{
-				cwd: config.entry ? process.cwd() : config.out
+				cwd: config.entry ? process.cwd() : config.out,
+				execArgv: process.argv
 			}
 		);
 		return;

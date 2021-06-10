@@ -2,14 +2,13 @@
 
 import "source-map-support/register";
 
-import chalk from "chalk";
 import { basename } from "path";
-
 import cfg from "./util/configHandler";
-import copyTask from "./util/copyTask";
+import chalk from "chalk";
 import checkDeps from "./util/depCheck";
-import runFileWatcher from "./util/fileWatcher";
 import checkTodos from "./util/todoCheck";
+import copyTask from "./util/copyTask";
+import runFileWatcher from "./util/fileWatcher";
 import runTSCompiler from "./util/tsCompiler";
 
 export const dsConsolePrefix = "● ",
