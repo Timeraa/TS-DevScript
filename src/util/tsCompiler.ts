@@ -1,22 +1,22 @@
-import { Branch, Tree } from "displayastree";
-import {
-	Diagnostic,
-	SemanticDiagnosticsBuilderProgram,
-	WatchOfConfigFile,
-	createSemanticDiagnosticsBuilderProgram,
-	createWatchCompilerHost,
-	createWatchProgram,
-	getLineAndCharacterOfPosition,
-	sys
-} from "typescript";
-import { config, dsConsolePrefix, name } from "../";
-
 import chalk from "chalk";
-import copyTask from "./copyTask";
 import debug from "debug";
-import outline from "./functions/outlineStrings";
+import { Branch, Tree } from "displayastree";
 import { relative } from "path";
+import {
+  createSemanticDiagnosticsBuilderProgram,
+  createWatchCompilerHost,
+  createWatchProgram,
+  Diagnostic,
+  getLineAndCharacterOfPosition,
+  SemanticDiagnosticsBuilderProgram,
+  sys,
+  WatchOfConfigFile,
+} from "typescript";
+
+import { config, dsConsolePrefix, name } from "../";
 import runChild from "./childHandler";
+import copyTask from "./copyTask";
+import outline from "./functions/outlineStrings";
 
 let program: WatchOfConfigFile<SemanticDiagnosticsBuilderProgram>,
 	host = createWatchCompilerHost(
@@ -59,6 +59,9 @@ function getDiagnostic(diagnostic: Diagnostic) {
 	//#endregion
 
 	//* Append to diagnosticErrorArray
+
+	if (diagnostic.file?.fileName === undefined) return;
+
 	diagnosticErrorArray.push({
 		file: diagnostic.file.fileName.replace(
 			host.getCurrentDirectory() + "/",
@@ -80,7 +83,7 @@ function getDiagnostic(diagnostic: Diagnostic) {
 }
 
 function reportDiagnostics() {
-	if (config.silent) return;
+	if (config.silent || !diagnosticErrorArray.length) return;
 
 	let result: {
 		[name: number]: string[];
