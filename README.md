@@ -13,7 +13,7 @@ It also automatically restarts the file on file additions, changes and deletions
 
 ```bash
 # global
-npm i -g ts-devscript
+npm i --location=global ts-devscript
 
 # npm
 npm i -D ts-devscript

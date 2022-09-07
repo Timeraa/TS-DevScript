@@ -42,7 +42,7 @@ export default async function runChild() {
 	}
 
 	if (
-		pathExists(config.entry ? config.entry : resolve(config.out, "index.js"))
+		await pathExists(config.entry ? config.entry : resolve(config.out, "index.js"))
 	) {
 		logger("Starting with entry index.js");
 		currentChild = fork(
@@ -50,14 +50,12 @@ export default async function runChild() {
 			process.argv,
 			{
 				cwd: config.entry ? process.cwd() : config.out,
-				execArgv: process.argv
 			}
 		);
 		return;
 	}
 
-	//TODO Better message
-	throw new Error("No entry found");
+	throw new Error("No entry point found!");
 }
 
 function onChildDeath(code: number, signal: NodeJS.Signals) {
@@ -77,8 +75,8 @@ async function killOldChild() {
 	if (currentChild && !currentChild.killed) {
 		try {
 			currentChild.removeListener("exit", onChildDeath);
-			await new Promise<void>((resolve, reject) =>
-				treeKill(currentChild.pid, "SIGKILL", (err) =>
+			await new Promise<void>((resolve, reject) => 
+				treeKill(currentChild!.pid!, "SIGKILL", (err) =>
 					err ? reject(err) : resolve()
 				)
 			);

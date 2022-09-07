@@ -73,7 +73,14 @@ async function deleteObsolete() {
 	//* Old files, delete
 	await Promise.all(
 		dist
-			.filter((f) => !src.includes((f.startsWith(config.out) ? f.replace(config.out, "") : f).split(".")[0]))
+			.filter(
+				(f) =>
+					!src.includes(
+						(f.startsWith(config.out) ? f.replace(config.out, "") : f).split(
+							"."
+						)[0]
+					)
+			)
 			.map((f) => remove(resolve(config.out, f)))
 	);
 	logger("Deleted obsolete files");

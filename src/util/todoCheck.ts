@@ -38,7 +38,7 @@ export default async function checkTodos() {
 			}
 		);
 
-		fileTodos.forEach((todo) => {
+		fileTodos.forEach((todo: any) => {
 			count++;
 			const todoObject = {
 				line: todo.line,
