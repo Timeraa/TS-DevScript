@@ -26,6 +26,8 @@ export default async function runChild() {
 		currentChild = spawn(
 			(await pathExists(process.cwd() + "/yarn.lock"))
 				? "yarn run --silent start"
+				: (await pathExists(process.cwd() + "/pnpm-lock.yaml"))
+				? "pnpm run --silent start"
 				: "npm run --silent start",
 			process.argv,
 			{
@@ -42,14 +44,16 @@ export default async function runChild() {
 	}
 
 	if (
-		await pathExists(config.entry ? config.entry : resolve(config.out, "index.js"))
+		await pathExists(
+			config.entry ? config.entry : resolve(config.out, "index.js")
+		)
 	) {
 		logger("Starting with entry index.js");
 		currentChild = fork(
 			config.entry ? config.entry : resolve(config.out, "index.js"),
 			process.argv,
 			{
-				cwd: config.entry ? process.cwd() : config.out,
+				cwd: config.entry ? process.cwd() : config.out
 			}
 		);
 		return;
@@ -75,7 +79,7 @@ async function killOldChild() {
 	if (currentChild && !currentChild.killed) {
 		try {
 			currentChild.removeListener("exit", onChildDeath);
-			await new Promise<void>((resolve, reject) => 
+			await new Promise<void>((resolve, reject) =>
 				treeKill(currentChild!.pid!, "SIGKILL", (err) =>
 					err ? reject(err) : resolve()
 				)
