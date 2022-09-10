@@ -36,8 +36,10 @@ interface config {
 	silent: boolean;
 }
 
-export default function run() {
-	let config: config;
+export type Config = config & Record<string, any>
+
+export default function run(): Config {
+	let config: Config;
 
 	if (process.argv.includes("-h") || process.argv.includes("--help")) {
 		new Tree(

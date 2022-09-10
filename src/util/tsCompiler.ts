@@ -3,14 +3,14 @@ import debug from "debug";
 import { Branch, Tree } from "displayastree";
 import { relative } from "path";
 import {
-  createSemanticDiagnosticsBuilderProgram,
-  createWatchCompilerHost,
-  createWatchProgram,
-  Diagnostic,
-  getLineAndCharacterOfPosition,
-  SemanticDiagnosticsBuilderProgram,
-  sys,
-  WatchOfConfigFile,
+	createSemanticDiagnosticsBuilderProgram,
+	createWatchCompilerHost,
+	createWatchProgram,
+	Diagnostic,
+	getLineAndCharacterOfPosition,
+	SemanticDiagnosticsBuilderProgram,
+	sys,
+	WatchOfConfigFile
 } from "typescript";
 
 import { config, dsConsolePrefix, name } from "../";

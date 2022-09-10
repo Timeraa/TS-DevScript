@@ -12,7 +12,8 @@ export default async function copyTask() {
 	const pkgChecks = await Promise.all([
 		pathExists("package.json"),
 		pathExists("package-lock.json"),
-		pathExists("yarn.lock")
+		pathExists("yarn.lock"),
+		pathExists("pnpm-lock.yaml")
 	]);
 
 	let copyTasks: Promise<void>[] = [];
@@ -25,6 +26,10 @@ export default async function copyTask() {
 		);
 	if (pkgChecks[2])
 		copyTasks.push(copy("yarn.lock", resolve(config.out, `yarn.lock`)));
+	if (pkgChecks[3])
+		copyTasks.push(
+			copy("pnpm-lock.yaml", resolve(config.out, `pnpm-lock.yaml`))
+		);
 
 	//* Copy files from src to dist
 	copyTasks.push(
@@ -63,7 +68,7 @@ async function deleteObsolete() {
 	if (config.include)
 		src.push(...(await glob(config.include, { onlyFiles: true })));
 
-	src.push("package.json", "package-lock.json", "yarn.lock");
+	src.push("package.json", "package-lock.json", "yarn.lock", "pnpm-lock.yaml");
 
 	//* Filter file differences
 	src = src
@@ -73,7 +78,14 @@ async function deleteObsolete() {
 	//* Old files, delete
 	await Promise.all(
 		dist
-			.filter((f) => !src.includes((f.startsWith(config.out) ? f.replace(config.out, "") : f).split(".")[0]))
+			.filter(
+				(f) =>
+					!src.includes(
+						(f.startsWith(config.out) ? f.replace(config.out, "") : f).split(
+							"."
+						)[0]
+					)
+			)
 			.map((f) => remove(resolve(config.out, f)))
 	);
 	logger("Deleted obsolete files");

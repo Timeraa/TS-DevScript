@@ -1,19 +1,16 @@
 {
 	"compilerOptions": {
-		"module": "CommonJS",
 		"target": "ES5",
+		"moduleDetection": "auto",
+		"module": "CommonJS",
+		"moduleResolution": "node",
 		"inlineSourceMap": true,
 		"inlineSources": true,
-		"moduleResolution": "node",
+		"outDir": "./bin",
 		"esModuleInterop": true,
-		"removeComments": true,
-		"outDir": "bin",
-		"newLine": "lf",
-		"sourceRoot": ".",
-		"baseUrl": ".",
-		"noUnusedParameters": true,
-		"noUnusedLocals": true
+		"forceConsistentCasingInFileNames": true,
+		"strict": true,
+		"skipLibCheck": true
 	},
-	"include": ["src/**/*"],
-	"exclude": ["node_modules"]
+	"include": ["src/**/*"]
 }

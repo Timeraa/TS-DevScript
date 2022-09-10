@@ -250,6 +250,7 @@ export default async function checkDeps(showErrors = true) {
 								const module = aPM.deprecatedModules.find(
 									(m) => m.module === k
 								);
+								if (!module) continue;
 								lockData[k] = {
 									version: module.newerNonDeprecatedVersions.length
 										? module.newerNonDeprecatedVersions[0]
@@ -263,6 +264,7 @@ export default async function checkDeps(showErrors = true) {
 								const module = aPM.deprecatedModules.find(
 									(m) => m.module === k
 								);
+								if (!module) continue;
 								lockData[k] = {
 									version: module.newerNonDeprecatedVersions.length
 										? module.newerNonDeprecatedVersions[0]
@@ -276,6 +278,7 @@ export default async function checkDeps(showErrors = true) {
 								const module = aPM.deprecatedModules.find(
 									(m) => m.module === k
 								);
+								if (!module) continue;
 								lockData[k] = {
 									version: module.newerNonDeprecatedVersions.length
 										? module.newerNonDeprecatedVersions[0]
@@ -484,6 +487,7 @@ export default async function checkDeps(showErrors = true) {
 						case "Ignore until next MAJOR":
 							{
 								const module = aPM.outdatedModules.find((m) => m.module === k);
+								if (!module) continue;
 								lockData[k] = {
 									version: module.newerNonDeprecatedVersions.length
 										? module.newerNonDeprecatedVersions[0]
@@ -495,6 +499,7 @@ export default async function checkDeps(showErrors = true) {
 						case "Ignore until next MINOR":
 							{
 								const module = aPM.outdatedModules.find((m) => m.module === k);
+								if (!module) continue;
 								lockData[k] = {
 									version: module.newerNonDeprecatedVersions.length
 										? module.newerNonDeprecatedVersions[0]
@@ -506,6 +511,7 @@ export default async function checkDeps(showErrors = true) {
 						case "Ignore until next PATCH":
 							{
 								const module = aPM.outdatedModules.find((m) => m.module === k);
+								if (!module) continue;
 								lockData[k] = {
 									version: module.newerNonDeprecatedVersions.length
 										? module.newerNonDeprecatedVersions[0]
@@ -687,7 +693,7 @@ export default async function checkDeps(showErrors = true) {
 				(m) =>
 					`${chalk.hex("#ebc14d")(m.module)} • ${chalk.hex("#bebebe")(
 						"from: " +
-							chalk.green(chalk.bold(m.fromVersion.replace("^", ""))) +
+							chalk.green(chalk.bold(m.fromVersion!.replace("^", ""))) +
 							"! to: " +
 							chalk.green(chalk.bold(m.version.replace("^", "")))
 					)}${m.devDependency ? " | " + chalk.cyan("devDependency") : ""}`
