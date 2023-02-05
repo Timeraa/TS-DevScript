@@ -21,7 +21,7 @@ specifiers:
   fast-glob: ^3.2.11
   fs-extra: ^11.0.0
   inquirer: ^9.0.0
-  leasot: ^12.5.0
+  leasot: ^13.0.0
   ora: ^5.4.1
   rimraf: ^3.0.2
   source-map-support: ^0.5.21
@@ -40,7 +40,7 @@ dependencies:
   fast-glob: 3.2.11
   fs-extra: 11.1.0
   inquirer: 9.1.4
-  leasot: 12.5.0
+  leasot: 13.3.0
   ora: 5.4.1
   source-map-support: 0.5.21
   tree-kill: 1.2.2
@@ -407,6 +407,7 @@ packages:
   /array-union/2.1.0:
     resolution: {integrity: sha512-HGyxoOTYUyCM6stUe6EJgnd4EoewAI7zMdfqO+kGjnlZmBDz/cR5pf8r/cR4Wq60sL/p0IkcjUEEPwS3GFrIyw==}
     engines: {node: '>=8'}
+    dev: true
 
   /async/3.2.4:
     resolution: {integrity: sha512-iAB+JbDEGXhyIUavoDl9WP/Jj106Kz9DEn1DPgYw5ruDn0e3Wgi3sKFm55sASdGBNOQB8F59d9qQ7deqrHA8wQ==}
@@ -591,9 +592,9 @@ packages:
       typical: 4.0.0
     dev: false
 
-  /commander/7.2.0:
-    resolution: {integrity: sha512-QrWXB+ZQSVPmIWIhtEO9H+gwHaMGYiF5ChvoJ+K9ZGHG/sVsa6yiesAD1GC/x46sET00Xlwo1u49RVVVzvcSkw==}
-    engines: {node: '>= 10'}
+  /commander/9.5.0:
+    resolution: {integrity: sha512-KRs7WVDKg86PWiuAqhDrAQnTXZKraVcCc6vFdL14qrZ/DcWwuRo7VoiYXalXO7S5GKpqYiVEwCbgFDfxNHKJBQ==}
+    engines: {node: ^12.20.0 || >=14}
     dev: false
 
   /compare-versions/3.6.0:
@@ -940,9 +941,9 @@ packages:
     resolution: {integrity: sha512-dsKNQNdj6xA3T+QlADDA7mOSlX0qiMINjn0cgr+eGHGsbSHzTabcIogz2+p/iqP1Xs6EP/sS2SbqH+brGTbq0g==}
     dev: true
 
-  /get-stdin/8.0.0:
-    resolution: {integrity: sha512-sY22aA6xchAzprjyqmSEQv4UbAAzRN0L2dQB0NlN5acTTK9Don6nhoc3eAbUnpZiCANAMfd/+40kVdKfFygohg==}
-    engines: {node: '>=10'}
+  /get-stdin/9.0.0:
+    resolution: {integrity: sha512-dVKBjfWisLAicarI2Sf+JuBE/DghV4UzNAVe9yhEJuzeREd3JhOTE9cUaJTeSa77fsbQUK3pcOpJfM59+VKZaA==}
+    engines: {node: '>=12'}
     dev: false
 
   /get-stream/4.1.0:
@@ -1000,6 +1001,18 @@ packages:
       ignore: 5.2.0
       merge2: 1.4.1
       slash: 3.0.0
+    dev: true
+
+  /globby/13.1.3:
+    resolution: {integrity: sha512-8krCNHXvlCgHDpegPzleMq07yMYTO2sXKASmZmquEYWEmCx6J5UTRbp5RwMJkTJGtcQ44YpiUYUiN0b9mzy8Bw==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+    dependencies:
+      dir-glob: 3.0.1
+      fast-glob: 3.2.11
+      ignore: 5.2.0
+      merge2: 1.4.1
+      slash: 4.0.0
+    dev: false
 
   /got/9.6.0:
     resolution: {integrity: sha512-R7eWptXuGYxwijs0eV+v3o6+XH1IqVK8dJOEecQfTmkncw9AV4dcw/Dhxi8MdlqPthxxpZyizMzyg8RTmEsG+Q==}
@@ -1190,21 +1203,21 @@ packages:
       json-buffer: 3.0.0
     dev: false
 
-  /leasot/12.5.0:
-    resolution: {integrity: sha512-bx2hqCDZ6EVzdaM+aIBNO12Ff0BscGVWPf23Wzj5FLCEXZuJR729Wn5Naom8dJcqpEbsk2XXzvdHus/3WZqW5w==}
-    engines: {node: '>=12'}
+  /leasot/13.3.0:
+    resolution: {integrity: sha512-WEAlnIRsUJJv525J9B1i20tFuwj+B8EHPgZjKnfVNkrKbaJgiGXilnS/yHDhitWKy9IpE/iQ7XKTPP/9nL5DoQ==}
+    engines: {node: '>=14.13.1'}
     hasBin: true
     dependencies:
       async: 3.2.4
-      chalk: 4.1.2
-      commander: 7.2.0
+      chalk: 5.2.0
+      commander: 9.5.0
       eol: 0.9.1
-      get-stdin: 8.0.0
-      globby: 11.1.0
+      get-stdin: 9.0.0
+      globby: 13.1.3
       json2xml: 0.1.3
       lodash: 4.17.21
-      log-symbols: 4.1.0
-      strip-ansi: 6.0.1
+      log-symbols: 5.1.0
+      strip-ansi: 7.0.1
       text-table: 0.2.0
     dev: false
 
@@ -1612,6 +1625,12 @@ packages:
   /slash/3.0.0:
     resolution: {integrity: sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==}
     engines: {node: '>=8'}
+    dev: true
+
+  /slash/4.0.0:
+    resolution: {integrity: sha512-3dOsAHXXUkQTpOYcoAxLIorMTp4gIQr5IW3iVb7A7lFIp0VHhnynm9izx6TssdrIcVIESAlVjtnO2K8bg+Coew==}
+    engines: {node: '>=12'}
+    dev: false
 
   /source-map-support/0.5.21:
     resolution: {integrity: sha512-uBHU3L3czsIyYXKX88fdrGovxdSCoTGDRZ6SYXtSRxLZUzHg5P/66Ht6uoUlHu9EZod+inXhKo3qQgwXUT/y1w==}
