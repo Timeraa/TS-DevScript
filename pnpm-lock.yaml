@@ -14,7 +14,7 @@ specifiers:
   chalk: ^5.0.0
   chokidar: ^3.5.3
   command-line-args: ^5.2.1
-  compare-versions: ^5.0.1
+  compare-versions: ^6.0.0
   debug: ^4.3.4
   displayastree: ^2.0.0
   eslint: ^8.23.0
@@ -34,7 +34,7 @@ dependencies:
   chalk: 5.2.0
   chokidar: 3.5.3
   command-line-args: 5.2.1
-  compare-versions: 5.0.1
+  compare-versions: 6.0.0
   debug: 4.3.4
   displayastree: 2.0.0
   fast-glob: 3.2.11
@@ -584,8 +584,8 @@ packages:
     resolution: {integrity: sha512-W6Af2Iw1z4CB7q4uU4hv646dW9GQuBM+YpC0UvUCWSD8w90SJjp+ujJuXaEMtAXBtSqGfMPuFOVn4/+FlaqfBA==}
     dev: false
 
-  /compare-versions/5.0.1:
-    resolution: {integrity: sha512-v8Au3l0b+Nwkp4G142JcgJFh1/TUhdxut7wzD1Nq1dyp5oa3tXaqb03EXOAB6jS4gMlalkjAUPZBMiAfKUixHQ==}
+  /compare-versions/6.0.0:
+    resolution: {integrity: sha512-s2MzYxfRsE9f/ow8hjn7ysa7pod1xhHdQMsgiJtKx6XSNf4x2N1KG4fjrkUmXcP/e9Y2ZX4zB6sHIso0Lm6evQ==}
     dev: false
 
   /concat-map/0.0.1:
